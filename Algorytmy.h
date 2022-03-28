@@ -4,6 +4,7 @@
 #include <fstream>
 #include <list>
 #include <algorithm>
+#include <cmath>
 
 template<typename T>
 void introWrap(T *tab, T *tmp, int left, int right, int maxdepth);

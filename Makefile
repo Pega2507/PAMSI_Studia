@@ -4,7 +4,7 @@ HEADER = Algorytmy.h
 OUT = a.out
 CC = g++ 
 FLAGS = -g -c -Wall
-LFLAGS = -lm -list -algorithm
+LFLAGS = -lm
 
 all: $(OBJS)
 	$(CC) -g $(OBJS) -o $(OUT) $(LFLAGS) 
