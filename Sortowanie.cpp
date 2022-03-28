@@ -85,7 +85,7 @@ int main()
 
     for(SortFncPoint<int> fp : ptable) 
     {
-        std::cout << sorts[iter++] << std::endl;
+        std::cout << std::endl << sorts[iter++] << std::endl;
         for (double percent : percenttab) 
         {
             for (int n : ntab) 
@@ -106,6 +106,7 @@ int main()
                 kill_table<int>(tmp);
 
                 std::cout << n << " table sorted!" << std::endl;
+                std::cout << counter / loops << std::endl;
                 counter = 0;
             }
             std::cout << percent << " % done!" << std::endl;
