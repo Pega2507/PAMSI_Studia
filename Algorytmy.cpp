@@ -1,10 +1,7 @@
 #include "Algorytmy.h"
 
-/**************
-*             *
-* MERGE SORT  *
-*             *
-**************/
+/*** Merge sort ***/
+
 template<typename T>
 void merge(T *tab, T *tmp, int left, int midd, int right) //sortowanie
 {
@@ -47,11 +44,7 @@ void mergeWrap(T *tab, T *tmp, int left, int right, int maxdepth)
 }
 
 
-/**************
-*             *
-* QUICK SORT  *
-*             *
-**************/
+/***Quick sort***/
 template<typename T>
 int partition(T *tab, int left, int right)
 {
@@ -91,11 +84,7 @@ void quickWrap(T *tab, T *tmp, int left, int right, int maxdepth)
 }
 
 
-/*****************
-*                *
-* INSERTION SORT *
-*                *
-******************/
+/***Insertion sort***/
 template<typename T>
 void insertionsort(T *tab, int left, int right)
 {
@@ -114,11 +103,7 @@ void insertionsort(T *tab, int left, int right)
 }
 
 
-/************
-*           *
-* HEAP SORT *
-*           *
-************/
+/***Heap sort***/
 template<typename T>
 void heapsort(T *left, T *right)
 {
@@ -127,11 +112,7 @@ void heapsort(T *left, T *right)
 }
 
 
-/**************
-*             *
-* INTRO SORT  *
-*             *
-**************/
+/***Heap sort***/
 template<typename T>
 void introsort(T *tab, T *left, T *right, int maxdepth)
 {
