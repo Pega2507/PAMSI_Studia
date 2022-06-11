@@ -1,12 +1,10 @@
 #include "bellman_ford.hpp"
 
-static int  s_infinity = 1000000; //because of the small interval in which waga of the edge can be created
-static int  s_neg_infinity = -1000000;	//it is ok to set inf to the one million. If you want to make this
-										//interval bigger, you should also change this static variable to a bigger one
-										//otherwise program might not work properly for bigger number of vertices
+static int  s_infinity = 10000000; 
+static int  s_neg_infinity = -10000000;	
 
 //wyswietla na konsoli i tworzy plik Output.txt
-void finalSolution(std::string t_pathArr[], int t_dist[], int t_n, int t_startNode) {
+void finalSolution(std::string t_tabSciezek[], int t_dist[], int t_n, int t_startNode) {
 
 	std::ofstream file("Output.txt");
 	
@@ -50,23 +48,23 @@ void finalSolution(std::string t_pathArr[], int t_dist[], int t_n, int t_startNo
 		//najkrotszy dystans
 		if ((t_dist[i] >= 100 && t_dist[i] < 1000) || (-100 > t_dist[i]  && t_dist[i] <= -10)) {
 		
-			std::cout << " Najkrotsza sciezka: " << t_pathArr[i] << i;
-			file << " Najkrotsza sciezka: " << t_pathArr[i] << i;
+			std::cout << " Najkrotsza sciezka: " << t_tabSciezek[i] << i;
+			file << " Najkrotsza sciezka: " << t_tabSciezek[i] << i;
 		}
 		else if (0 <= t_dist[i] && t_dist[i] < 10) {
 
-			std::cout << "   Najkrotsza sciezka: " << t_pathArr[i] << i;
-			file << "   Najkrotsza sciezka: " << t_pathArr[i] << i;
+			std::cout << "   Najkrotsza sciezka: " << t_tabSciezek[i] << i;
+			file << "   Najkrotsza sciezka: " << t_tabSciezek[i] << i;
 		}
 		else if ((t_dist[i] >= 10 && t_dist[i] < 100) || (-10 < t_dist[i] && t_dist[i] < 0)) {
 
-			std::cout << "  Najkrotsza sciezka: " << t_pathArr[i] << i;
-			file << "  Najkrotsza sciezka: " << t_pathArr[i] << i;
+			std::cout << "  Najkrotsza sciezka: " << t_tabSciezek[i] << i;
+			file << "  Najkrotsza sciezka: " << t_tabSciezek[i] << i;
 		}
 		else {
 			
-			std::cout << "Najkrotsza sciezka: " << t_pathArr[i] << i;
-			file << "Najkrotsza sciezka: " << t_pathArr[i] << i;
+			std::cout << "Najkrotsza sciezka: " << t_tabSciezek[i] << i;
+			file << "Najkrotsza sciezka: " << t_tabSciezek[i] << i;
 		}
 		std::cout << std::endl;
 		file << std::endl;
@@ -77,7 +75,7 @@ void finalSolution(std::string t_pathArr[], int t_dist[], int t_n, int t_startNo
 
 
 //algorytm dla listy
-double bellmanFord(std::shared_ptr<GrafLista> t_graf, int t_startNode, bool t_printSolution) {
+double bellmanFord(std::shared_ptr<GrafLista> t_graf, int t_startNode, bool t_wyswRozw) {
 
 	std::string* sciezki = new std::string[t_graf->getW()]; //przechowuje sciezki
 
@@ -101,7 +99,7 @@ double bellmanFord(std::shared_ptr<GrafLista> t_graf, int t_startNode, bool t_pr
 			if (najkrotszeSciezki[u] + waga < najkrotszeSciezki[v]) { //sprawdzenie czy znaleziono krotsza sciezke
 				najkrotszeSciezki[v] = najkrotszeSciezki[u] + waga;
 					
-				if (t_printSolution) {
+				if (t_wyswRozw) {
 						
 					sciezki[v].clear();
 					sciezki[v].append(sciezki[u] + std::to_string(u) + "->");
@@ -122,18 +120,12 @@ double bellmanFord(std::shared_ptr<GrafLista> t_graf, int t_startNode, bool t_pr
 				if (najkrotszeSciezki[u] > s_infinity/2) najkrotszeSciezki[u] = s_infinity;  
 				else najkrotszeSciezki[v] = s_neg_infinity;
 			}
-			else if (najkrotszeSciezki[u] > s_infinity/2) najkrotszeSciezki[u] = s_infinity;  //after first part of the algorithm
-						//if there was a negative cycle, and this (j) node is disconnected from the zrodlo then distances
-						//are going to be corrupted and instead of infinity (1000000) there will be something like 9999992. 
-						//thats why we need to manually set it to infinity. This is done by detecting > inf/2 so the the corrupted
-						//distance sholud be interpreted correctly and not confused with huge (correct) distance. On the other
-						//hand corrupted distance can also reach huge negative amount and mess it up either way. Thats why its 						
-						//best to distinguish this event by the middle value of infinity.
+			else if (najkrotszeSciezki[u] > s_infinity/2) najkrotszeSciezki[u] = s_infinity;  
 		}
 	}
 	auto t_end = std::chrono::high_resolution_clock::now(); //zatrzymanie odliczania
 
-	if (t_printSolution) finalSolution(std::move(sciezki), std::move(najkrotszeSciezki), t_graf->getW(), t_startNode);
+	if (t_wyswRozw) finalSolution(std::move(sciezki), std::move(najkrotszeSciezki), t_graf->getW(), t_startNode);
 	delete[] najkrotszeSciezki;
 	delete[] sciezki;
 	return std::chrono::duration<double, std::milli>(t_end - t_start).count(); //return the time difference
@@ -141,7 +133,7 @@ double bellmanFord(std::shared_ptr<GrafLista> t_graf, int t_startNode, bool t_pr
 
 
 //algorytm dla macierzy
-double bellmanFord(std::shared_ptr<MacierzowyGraf> t_graf, int t_startNode, bool t_printSolution) {
+double bellmanFord(std::shared_ptr<MacierzowyGraf> t_graf, int t_startNode, bool t_wyswRozw) {
 	
 	std::string* sciezki = new std::string[t_graf->getW()];
 
@@ -166,7 +158,7 @@ double bellmanFord(std::shared_ptr<MacierzowyGraf> t_graf, int t_startNode, bool
 				if (najkrotszeSciezki[u] + waga < najkrotszeSciezki[v]) {
 					
 					najkrotszeSciezki[v] = najkrotszeSciezki[u] + waga;
-					if (t_printSolution) {
+					if (t_wyswRozw) {
 
 						sciezki[v].clear();
 						sciezki[v].append(sciezki[u] + std::to_string(u) + "->");
@@ -194,7 +186,7 @@ double bellmanFord(std::shared_ptr<MacierzowyGraf> t_graf, int t_startNode, bool
 	}
 	auto t_end = std::chrono::high_resolution_clock::now(); 
 
-	if (t_printSolution) finalSolution(std::move(sciezki), std::move(najkrotszeSciezki), t_graf->getW(), t_startNode);
+	if (t_wyswRozw) finalSolution(std::move(sciezki), std::move(najkrotszeSciezki), t_graf->getW(), t_startNode);
 	delete[] najkrotszeSciezki;
 	delete[] sciezki;
 	return std::chrono::duration<double, std::milli>(t_end - t_start).count(); 
