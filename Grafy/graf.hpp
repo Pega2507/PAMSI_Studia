@@ -1,3 +1,4 @@
+#pragma once
 #include <stdlib.h>
 #include <iostream>
 #include <fstream>
@@ -5,7 +6,8 @@
 class Graf 
 {
 protected:
-	int m_W, m_B; //ilosc wierzcholkow i brzegow
+	int m_B; //ilosc wierzcholkow i brzegow
+	int m_W;
 	double m_gestosc; //gestosc grafu
 
 public:
@@ -15,8 +17,7 @@ public:
 	virtual void wypelnijGraf(const bool allowLoops) const = 0; //wypelnia losowymi wartosciami
 	virtual void pokazGraf() const =  0; //pokazuje graf na konsoli
 	virtual const int czytPlik() = 0; //wypelnia graf wartosciami z pliku
-	virtual void createInput(const int t_startNode) const = 0; //creates artificial input file so user can copy it to
-													//external graph-visualization tool
+	virtual void createInput(const int t_startNode) const = 0; 
 	virtual ~Graf() {};
 	explicit Graf(int t_W, int t_B, double t_gestosc) : m_B(t_W), m_W(t_B), m_gestosc(t_gestosc) {}
 	Graf() {}; //Unparametrized constructor, so program can crete a graph without initialization. 
